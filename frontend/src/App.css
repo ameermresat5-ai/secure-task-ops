@@ -113,3 +113,12 @@ select {
 .delete-button:hover {
   background: #b91c1c;
 }
+
+.secondary-button {
+  background: #4b5563;
+  margin-top: 18px;
+}
+
+.secondary-button:hover {
+  background: #374151;
+}
