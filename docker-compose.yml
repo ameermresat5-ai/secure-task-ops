@@ -1,0 +1,46 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: securetaskops-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: securetaskops
+      POSTGRES_USER: secureuser
+      POSTGRES_PASSWORD: securepass
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: ./backend
+    container_name: securetaskops-backend
+    restart: always
+    depends_on:
+      - postgres
+    environment:
+      FLASK_ENV: development
+      DATABASE_URL: postgresql://secureuser:securepass@postgres:5432/securetaskops
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend:/app
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: securetaskops-frontend
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+
+volumes:
+  postgres_data:
