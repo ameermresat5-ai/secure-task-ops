@@ -1,36 +1,51 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TaskCard from "../components/TaskCard";
 
+const defaultTasks = [
+  {
+    id: 1,
+    title: "Create React frontend",
+    description: "Build the first frontend pages.",
+    status: "In Progress",
+    priority: "High",
+  },
+  {
+    id: 2,
+    title: "Connect API",
+    description: "Connect frontend to Flask backend.",
+    status: "To Do",
+    priority: "Medium",
+  },
+  {
+    id: 3,
+    title: "Add Docker support",
+    description: "Run frontend inside a Docker container.",
+    status: "To Do",
+    priority: "High",
+  },
+];
+
+function loadTasks() {
+  try {
+    const savedTasks = localStorage.getItem("securetaskops_tasks");
+    return savedTasks ? JSON.parse(savedTasks) : defaultTasks;
+  } catch {
+    return defaultTasks;
+  }
+}
+
 function Tasks() {
-  const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      title: "Create React frontend",
-      description: "Build the first frontend pages.",
-      status: "In Progress",
-      priority: "High",
-    },
-    {
-      id: 2,
-      title: "Connect API",
-      description: "Connect frontend to Flask backend.",
-      status: "To Do",
-      priority: "Medium",
-    },
-    {
-      id: 3,
-      title: "Add Docker support",
-      description: "Run frontend inside a Docker container.",
-      status: "To Do",
-      priority: "High",
-    },
-  ]);
+  const [tasks, setTasks] = useState(loadTasks);
 
   const [formData, setFormData] = useState({
     title: "",
     description: "",
     priority: "Medium",
   });
+
+  useEffect(() => {
+    localStorage.setItem("securetaskops_tasks", JSON.stringify(tasks));
+  }, [tasks]);
 
   function handleChange(event) {
     setFormData({
@@ -75,6 +90,10 @@ function Tasks() {
     setTasks(tasks.filter((task) => task.id !== taskId));
   }
 
+  function handleResetTasks() {
+    setTasks(defaultTasks);
+  }
+
   return (
     <div className="page">
       <h1>Tasks</h1>
@@ -108,6 +127,10 @@ function Tasks() {
 
         <button type="submit">Add Task</button>
       </form>
+
+      <button className="secondary-button" onClick={handleResetTasks}>
+        Reset Default Tasks
+      </button>
 
       <div className="grid margin-top">
         {tasks.map((task) => (
