@@ -1,26 +1,41 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ProjectCard from "../components/ProjectCard";
 
+const defaultProjects = [
+  {
+    id: 1,
+    name: "DevSecOps Final Project",
+    description: "Main project for the course.",
+    tasks: 5,
+  },
+  {
+    id: 2,
+    name: "Frontend UI",
+    description: "React pages and dashboard.",
+    tasks: 3,
+  },
+];
+
+function loadProjects() {
+  try {
+    const savedProjects = localStorage.getItem("securetaskops_projects");
+    return savedProjects ? JSON.parse(savedProjects) : defaultProjects;
+  } catch {
+    return defaultProjects;
+  }
+}
+
 function Projects() {
-  const [projects, setProjects] = useState([
-    {
-      id: 1,
-      name: "DevSecOps Final Project",
-      description: "Main project for the course.",
-      tasks: 5,
-    },
-    {
-      id: 2,
-      name: "Frontend UI",
-      description: "React pages and dashboard.",
-      tasks: 3,
-    },
-  ]);
+  const [projects, setProjects] = useState(loadProjects);
 
   const [formData, setFormData] = useState({
     name: "",
     description: "",
   });
+
+  useEffect(() => {
+    localStorage.setItem("securetaskops_projects", JSON.stringify(projects));
+  }, [projects]);
 
   function handleChange(event) {
     setFormData({
