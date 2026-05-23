@@ -17,3 +17,7 @@ frontend/dist/
 .DS_Store
 .vscode/
 .idea/
+
+# Flask local instance and database
+backend/instance/
+*.db
