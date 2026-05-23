@@ -4,6 +4,7 @@ from config import Config
 from models import db, User, Project, Task, UploadedFile
 from routes.auth_routes import auth_bp
 from routes.project_routes import project_bp
+from routes.task_routes import task_bp
 
 def create_app():
     app = Flask(__name__)
@@ -14,6 +15,7 @@ def create_app():
 
     app.register_blueprint(auth_bp, url_prefix="/api")
     app.register_blueprint(project_bp, url_prefix="/api")
+    app.register_blueprint(task_bp, url_prefix="/api")
 
     @app.route("/api/health")
     def health():
