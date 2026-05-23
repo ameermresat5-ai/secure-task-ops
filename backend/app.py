@@ -1,15 +1,36 @@
 from flask import Flask
 from flask_cors import CORS
+from config import Config
+from models import db, User, Project, Task, UploadedFile
 
-app = Flask(__name__)
-CORS(app)
+def create_app():
+    app = Flask(__name__)
+    app.config.from_object(Config)
 
-@app.route("/api/health")
-def health():
-    return {
-        "status": "ok",
-        "message": "SecureTaskOps backend is running"
-    }
+    CORS(app)
+    db.init_app(app)
+
+    @app.route("/api/health")
+    def health():
+        return {
+            "status": "ok",
+            "message": "SecureTaskOps backend is running"
+        }
+
+    @app.route("/api/db-test")
+    def db_test():
+        return {
+            "status": "ok",
+            "message": "Database models are loaded",
+            "models": ["User", "Project", "Task", "UploadedFile"]
+        }
+
+    with app.app_context():
+        db.create_all()
+
+    return app
+
+app = create_app()
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)
