@@ -1,0 +1,84 @@
+name: Security Actions
+
+on:
+  pull_request:
+    branches:
+      - develop
+
+  push:
+    branches:
+      - feature/security-actions
+
+jobs:
+  security-scan:
+    name: Run Security Scans
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install Python security tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install bandit pip-audit
+
+      - name: Python code security scan with Bandit
+        continue-on-error: true
+        run: bandit -r backend -x backend/venv,backend/tests
+
+      - name: Python dependency scan with pip-audit
+        continue-on-error: true
+        run: pip-audit -r backend/requirements.txt
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Frontend dependency scan with npm audit
+        working-directory: frontend
+        continue-on-error: true
+        run: npm audit --audit-level=moderate
+
+      - name: Secret scanning check
+        continue-on-error: true
+        run: |
+          echo "Checking for common secret patterns..."
+          grep -R -n -E "(AWS_ACCESS_KEY|AWS_SECRET|PRIVATE_KEY|TOKEN=|PASSWORD=|SECRET_KEY=)" . \
+            --exclude-dir=.git \
+            --exclude-dir=backend/venv \
+            --exclude-dir=frontend/node_modules || true
+
+      - name: Build backend Docker image
+        run: docker build -t securetaskops-backend ./backend
+
+      - name: Build frontend Docker image
+        run: docker build -t securetaskops-frontend ./frontend
+
+      - name: Scan backend Docker image with Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: securetaskops-backend
+          format: table
+          exit-code: 0
+          severity: HIGH,CRITICAL
+
+      - name: Scan frontend Docker image with Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: securetaskops-frontend
+          format: table
+          exit-code: 0
+          severity: HIGH,CRITICAL
