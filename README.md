@@ -2,9 +2,9 @@
 
 SecureTaskOps is a full-stack DevSecOps task management platform.
 
-The application allows users to register, log in, create projects, manage tasks, upload files, and view a dashboard with task statistics.
+The application allows users to register, log in, create projects, manage tasks, and view task statistics.
 
-The goal of this project is to demonstrate a complete DevSecOps workflow using GitHub, CI/CD, Docker, security actions, Terraform, and cloud deployment.
+The project demonstrates a DevSecOps workflow using GitHub, Pull Requests, CI/CD, Docker, Docker Compose, security actions, PostgreSQL, and cloud-ready infrastructure.
 
 ---
 
@@ -15,164 +15,141 @@ The goal of this project is to demonstrate a complete DevSecOps workflow using G
 - React frontend
 - Python Flask backend API
 - PostgreSQL database
-- User login/register
-- Task management
-- File upload to cloud storage or local storage
+- User register and login
+- Projects management
+- Tasks management
 
 ### DevOps
 
-- Git + GitHub teamwork
-- Branches and Pull Requests
-- GitHub Actions CI/CD
+- Git and GitHub teamwork
+- Feature branches
+- Pull Requests
+- GitHub Actions CI
 - Docker images
 - Docker Compose
 - Container networking
-- Deployment to cloud server
 
 ### Security
 
-- Code scanning
-- Dependency scanning
-- Secret scanning
-- Docker image scanning
-- Basic authentication security
-- Environment variables
 - GitHub Security Actions workflow
-
-### Infrastructure
-
-- Terraform
-- Cloud server: AWS EC2 or Azure VM
-- Security groups / firewall
-- Optional S3 bucket for uploaded files
-- Optional Kubernetes deployment
+- Bandit Python code scanning
+- pip-audit dependency scanning
+- npm audit frontend dependency scanning
+- Secret pattern scanning
+- Trivy Docker image scanning
 
 ---
 
-## Frontend Progress
+## Completed Work
 
-The frontend part is built with React and Vite.
+### Frontend
 
-Completed frontend work:
+- React Vite frontend
+- Dashboard page
+- Projects page
+- Tasks page
+- Login page
+- Register page
+- Project form
+- Task form
+- localStorage support
+- API service files
+- Frontend Dockerfile
+- Frontend CI workflow
 
-- Created React frontend structure
-- Added navigation bar
-- Added dashboard page
-- Added projects page
-- Added tasks page
-- Added login page
-- Added register page
-- Added project form
-- Added task form
-- Added delete project button
-- Added delete task button
-- Added mark task as done button
-- Added localStorage support for projects and tasks
-- Added API service files for future backend connection
-- Added Dockerfile for frontend
-- Added .dockerignore
-- Added GitHub Actions frontend CI workflow
+### Backend
+
+- Flask backend
+- Health check endpoint
+- SQLAlchemy database models
+- User model
+- Project model
+- Task model
+- UploadedFile model
+- Register API
+- Login API
+- Projects API
+- Tasks API
+- Backend tests with pytest
+- Backend Dockerfile
+- Backend CI workflow
+
+### Docker and DevOps
+
+- Frontend Docker image
+- Backend Docker image
+- PostgreSQL container
+- Docker Compose setup
+- Container networking between frontend, backend, and database
+
+### Security
+
+- Security GitHub Actions workflow
+- Bandit scan
+- pip-audit scan
+- npm audit scan
+- Secret scan
+- Trivy Docker image scan
 
 ---
 
-## Frontend Technologies
+## Run Full Project
 
-- React
-- Vite
-- JavaScript
-- CSS
-- Axios
-- React Router DOM
-- Docker
-- Nginx
-- GitHub Actions
+Install Docker Compose if needed:
+
+    apt update
+    apt install -y docker-compose
+
+Run the project:
+
+    docker-compose up --build
+
+Open:
+
+    Frontend: http://localhost:8080
+    Backend:  http://localhost:5000/api/health
+
+Stop the project:
+
+    docker-compose down
 
 ---
 
-## Frontend Commands
+## Run Backend Tests
 
-Run frontend locally:
-
-    cd frontend
-    npm install
-    npm run dev
-
-Build frontend:
-
-    cd frontend
-    npm run build
-
-Build frontend Docker image:
-
-    cd frontend
-    docker build -t securetaskops-frontend .
-
-Run frontend Docker container:
-
-    docker run -d --name securetaskops-frontend-test -p 8080:80 securetaskops-frontend
-
-Stop frontend Docker container:
-
-    docker stop securetaskops-frontend-test
-    docker rm securetaskops-frontend-test
+    cd backend
+    source venv/bin/activate
+    pytest
 
 ---
 
 ## GitHub Workflow
 
-This project is developed using branches and Pull Requests.
-
 Main branches:
 
-- main: stable final version
+- main: stable branch
 - develop: development branch
-- feature/*: feature branches
+- feature/*: work branches
 
 Workflow:
 
 1. Create a feature branch from develop
-2. Work on the feature
-3. Push the branch to GitHub
-4. Open a Pull Request into develop
-5. Wait for GitHub Actions checks
-6. Merge the Pull Request
-7. Continue with the next feature
+2. Add the work
+3. Push to GitHub
+4. Open Pull Request into develop
+5. Wait for GitHub Actions
+6. Merge into develop
 
 ---
 
-## Frontend Branches Completed
-
-- feature/frontend
-- feature/frontend-forms
-- feature/frontend-local-storage
-- feature/frontend-docker
-- feature/frontend-ci
-- feature/frontend-api-services
-
----
-
-## CI/CD
-
-The project includes a GitHub Actions workflow for the frontend.
-
-Current workflow:
+## Important Workflow Files
 
 - .github/workflows/frontend-ci.yml
-
-The workflow installs frontend dependencies and runs the React production build.
+- .github/workflows/backend-ci.yml
+- .github/workflows/security.yml
 
 ---
 
 ## Final Goal
 
-The final project will include:
-
-- Working React frontend
-- Working Flask backend
-- PostgreSQL database
-- Docker Compose setup
-- GitHub Actions CI/CD
-- Security scanning workflow
-- Terraform infrastructure
-- Cloud deployment
-- Professional documentation
+The final goal is to show a professional DevSecOps project with a working full-stack app, Docker containers, CI/CD, security scanning, and clear GitHub teamwork.
