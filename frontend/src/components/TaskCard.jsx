@@ -1,10 +1,24 @@
 function TaskCard({ task }) {
+  const statusClass = task.status === "Done" ? "badge success" : "badge warning";
+  const priorityClass =
+    task.priority === "High"
+      ? "badge danger"
+      : task.priority === "Low"
+      ? "badge muted"
+      : "badge primary";
+
   return (
     <div className="card">
-      <h3>{task.title}</h3>
+      <div className="card-header">
+        <h3>{task.title}</h3>
+        <span className={priorityClass}>{task.priority}</span>
+      </div>
+
       <p>{task.description}</p>
-      <p><strong>Status:</strong> {task.status}</p>
-      <p><strong>Priority:</strong> {task.priority}</p>
+
+      <div className="card-footer">
+        <span className={statusClass}>{task.status}</span>
+      </div>
     </div>
   );
 }
